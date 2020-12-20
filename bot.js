@@ -16,6 +16,33 @@ let count_f = 0;
 let count_s = 0;
 let count_t = 0;
 let lastAttack = 0;
+let arr = [];
+for (let i = 0; i < 50; ++i)
+    arr[i] = [];
+
+function sort_nearest_towers(kek, lol) {
+  for (let i = 0; i < kek.length - 1; ++i) {
+    kek[i].sort((a,b) => a-b);
+  }
+  for (let i = 0; i < lol.length - 1; ++i) {
+    lol[i].sort((a,b) => a-b);
+  }
+  ar
+}
+
+function some_shit(my_buildings, enemy_buildings, neutral_buildings) {
+  let kek = [];
+  let lol = [];
+  for (let j = 0; j < my_buildings.length; ++j){
+    kek[j] = [];
+    lol[j] = [];
+  }
+  for (let i = 0; i < my_buildings.length - 1; ++i) {
+    kek[i] = game_map.get_nearest_towers(my_buildings[i].id, neutral_buildings);
+    lol[i] = game_map.get_nearest_towers(my_buildings[i].id, neutral_buildings);
+    arr = sort_nearest_towers(kek, lol);
+  }
+}
 
 const Bot = (game, game_teams, game_params, game_map) => {
   try {
@@ -119,14 +146,32 @@ const Bot = (game, game_teams, game_params, game_map) => {
       /* Играем за воина */
       if (game_teams.my_her.hero_type === HeroType.Warrior) {
         let kek = game_map.get_nearest_towers(my_buildings[0].id, neutral_buildings);
-        count0 = kek[0].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[0].id) / game_params.creep.speed) / kek[0].creep_creation_time ;
-        process.send(game_teams.my_her.move(my_buildings[0].id, kek[0].id, 0.66));
-        count1 = kek[1].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[1].id) / game_params.creep.speed) / kek[1].creep_creation_time ;
-        process.send(game_teams.my_her.move(my_buildings[0].id, kek[1].id, 0.9));
-        count2 = kek[2].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[2].id) / game_params.creep.speed) / kek[2].creep_creation_time;
-        process.send(game_teams.my_her.move(my_buildings[0].id, kek[2].id, 1));
-        count3 = kek[3].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[3].id) / game_params.creep.speed) / kek[3].creep_creation_time;
-        process.send(game_teams.my_her.move(my_buildings[0].id, kek[3].id, 1));
+        if (my_buildings.length === 1) {
+			if (my_buildings[0].creeps_count > 19 && state.ability_ready(AbilityType[2])) {
+				count0 = kek[0].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[0].id) / game_params.creep.speed) / kek[0].creep_creation_time ;
+        		process.send(game_teams.my_her.move(my_buildings[0].id, kek[0].id, 0.66));
+        		count1 = kek[1].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[1].id) / game_params.creep.speed) / kek[1].creep_creation_time ;
+        		process.send(game_teams.my_her.move(my_buildings[0].id, kek[1].id, 0.9));
+        		count2 = kek[2].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[2].id) / game_params.creep.speed) / kek[2].creep_creation_time;
+       			process.send(game_teams.my_her.move(my_buildings[0].id, kek[2].id, 1));
+        		// count3 = kek[3].creeps_count + (game_map.towers_distance(my_buildings[0].id, kek[3].id) / game_params.creep.speed) / kek[3].creep_creation_time;
+				// process.send(game_teams.my_her.move(my_buildings[0].id, kek[3].id, 1));
+			}
+		}
+		else {
+            let nearest_tower = some_shit(my_buildings, enemy_buildings, neutral_buildings);
+            for (let i = 0; i < my_buildings.length - 1; ++i) {
+			    console.log(my_buildings.length);
+                let count0 = 10 + (game_map.towers_distance(my_buildings[i].id, kek[i].id) / game_params.creep.speed) / kek[i].creep_creation_time ;
+                let count1 = enemyBuildings[0].creeps_count + (game_map.towers_distance(my_buildings[i].id, enemyBuildings[i].id) / game_params.creep.speed) / enemyBuildings[i].creep_creation_time ;
+                if (my_buildings[i].creeps_count > 13)
+                  process.send(game_teams.my_her.move(my_buildings[i].id, kek[0].id, 0.77));
+                // let {msleep} = require('msleep');
+                //   usleep(3000).then(() => {
+                //     console.info('It slept for 300 milliseconds');
+                //   });
+			}
+		}
 
         // // проверяем доступность абилки Крик
         // if (state.ability_ready(AbilityType[3]))
@@ -166,40 +211,40 @@ const Bot = (game, game_teams, game_params, game_map) => {
         //   process.send(game_teams.my_her.move(my_buildings[i + 2].id, lol[i].id, 1));
         // }
         //
-        let {usleep} = require('usleep');
-        usleep(3000).then(() => {
-          console.info('It slept for 300 milliseconds');
-        });
-
-        let first = game_map.get_nearest_towers((my_buildings[0].id), neutral_buildings);
-        let second = game_map.get_nearest_towers((my_buildings[1].id), neutral_buildings);
-        let third = game_map.get_nearest_towers((my_buildings[2].id), neutral_buildings);
-        count_f = first[0].creeps_count + (game_map.towers_distance(my_buildings[0].id, first[0].id) / game_params.creep.speed) / first[0].creep_creation_time;
-        process.send(game_map.my_her.move(my_buildings[0].id, first[0].id, 1));
-        count_s = second[0].creeps_count + (game_map.towers_distance(my_buildings[1].id, second[0].id) / game_params.creep.speed) / second[0].creep_creation_time;
-        process.send(game_map.my_her.move(my_buildings[0].id, second[0].id, 1));
-        count_t = third[0].creeps_count + (game_map.towers_distance(my_buildings[2].id, third[0].id) / game_params.creep.speed) / third[0].creep_creation_time;
-        process.send(game_map.my_her.move(my_buildings[0].id, third[0].id, 1));
-
-        let {msleep} = require('usleep');
-        msleep(3000).then(() => {
-          console.info('It slept for 300 milliseconds');
-        });
-        let countBuild;
-        if (enemy_squads.length > 2) {
-          for (let i = 0; i < my_buildings.length - 1; ++i)
-            countBuild[i] = my_buildings[i].creeps_count;
-          countBuild.sort((a,b) => a-b);
-        }
-        let index = countBuild.lastIndex - 1;
-        let lol = game_map.get_nearest_towers(my_buildings[0].id, enemy_buildings);
-        for (let i = 0; i <= lol.length - 1; ++i) {
-          count0 = lol[i].creeps_count + (game_map.towers_distance(my_buildings[index].id, lol[i].id) / game_params.creep.speed ) / lol[i].creep_creation_time;
-          process.send(game_teams.my_her.move(my_buildings[index].id, lol[i].id, 1));
-          count1 = lol[i].creeps_count + (game_map.towers_distance(my_buildings[index - 1].id, lol[i].id) / game_params.creep.speed ) / lol[i].creep_creation_time;
-          process.send(game_teams.my_her.move(my_buildings[index - 1].id, lol[i].id, 1));
-        }
-      }
+      //   let {usleep} = require('usleep');
+      //   usleep(3000).then(() => {
+      //     console.info('It slept for 300 milliseconds');
+      //   });
+      //
+      //   let first = game_map.get_nearest_towers((my_buildings[0].id), neutral_buildings);
+      //   let second = game_map.get_nearest_towers((my_buildings[1].id), neutral_buildings);
+      //   let third = game_map.get_nearest_towers((my_buildings[2].id), neutral_buildings);
+      //   count_f = first[0].creeps_count + (game_map.towers_distance(my_buildings[0].id, first[0].id) / game_params.creep.speed) / first[0].creep_creation_time;
+      //   process.send(game_map.my_her.move(my_buildings[0].id, first[0].id, 1));
+      //   count_s = second[0].creeps_count + (game_map.towers_distance(my_buildings[1].id, second[0].id) / game_params.creep.speed) / second[0].creep_creation_time;
+      //   process.send(game_map.my_her.move(my_buildings[0].id, second[0].id, 1));
+      //   count_t = third[0].creeps_count + (game_map.towers_distance(my_buildings[2].id, third[0].id) / game_params.creep.speed) / third[0].creep_creation_time;
+      //   process.send(game_map.my_her.move(my_buildings[0].id, third[0].id, 1));
+      //
+      //   let {msleep} = require('usleep');
+      //   msleep(3000).then(() => {
+      //     console.info('It slept for 300 milliseconds');
+      //   });
+      //   let countBuild;
+      //   if (enemy_squads.length > 2) {
+      //     for (let i = 0; i < my_buildings.length - 1; ++i)
+      //       countBuild[i] = my_buildings[i].creeps_count;
+      //     countBuild.sort((a,b) => a-b);
+      //   }
+      //   let index = countBuild.lastIndex - 1;
+      //   let lol = game_map.get_nearest_towers(my_buildings[0].id, enemy_buildings);
+      //   for (let i = 0; i <= lol.length - 1; ++i) {
+      //     count0 = lol[i].creeps_count + (game_map.towers_distance(my_buildings[index].id, lol[i].id) / game_params.creep.speed ) / lol[i].creep_creation_time;
+      //     process.send(game_teams.my_her.move(my_buildings[index].id, lol[i].id, 1));
+      //     count1 = lol[i].creeps_count + (game_map.towers_distance(my_buildings[index - 1].id, lol[i].id) / game_params.creep.speed ) / lol[i].creep_creation_time;
+      //     process.send(game_teams.my_her.move(my_buildings[index - 1].id, lol[i].id, 1));
+      //   }
+         }
       }
       // Применение абилки ускорение
 
