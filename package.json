@@ -1,0 +1,17 @@
+{
+  "name": "bot_node",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@babel/node": "^7.12.6",
+    "@babel/preset-env": "^7.12.7",
+    "argparse": "^2.0.1",
+    "child_process": "^1.0.2",
+    "js-base64": "^3.6.0",
+    "node-gzip": "^1.1.2",
+    "ws": "^7.4.1"
+  }
+}
